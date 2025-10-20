@@ -1,4 +1,4 @@
-public class rpsCheat implements Strategy {
+public class RpsCheat implements Strategy {
     @Override
     public String getMove(String playerMove)
     {

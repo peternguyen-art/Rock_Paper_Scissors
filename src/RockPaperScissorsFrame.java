@@ -128,6 +128,8 @@ public class RockPaperScissorsFrame extends JFrame {
         resultPnl = new JPanel();
         resultTxt = new JTextArea(10,25);
         resultTxt.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        resultTxt.setEditable(false);
+
         resultScroll = new JScrollPane(resultTxt);
 
         resultTxt.setEditable(false);
@@ -180,48 +182,62 @@ public class RockPaperScissorsFrame extends JFrame {
                 usedBtn.add(playerMove);
 
                 switch (playerMove) {
-                    case "R":
-                        rockCnt++;
-                        break;
-                    case "P":
-                        paperCnt++;
-                        break;
-                    case "S":
-                        scissorsCnt++;
-                        break;
+                    case "R" -> rockCnt++;
+                    case "P" -> paperCnt++;
+                    case "S" -> scissorsCnt++;
                 }
+
+                // Instantiate strategy objects with updated data
+                LeastUsed leastUsed = new LeastUsed();
+                MostUsed mostUsed = new MostUsed();
+                LastUsed lastUsed = new LastUsed();
+                RpsRandom random = new RpsRandom();
+                RpsCheat cheat = new RpsCheat();
+
+                // Determine computer strategy
+                int cheatIndicator = rand.nextInt(100) + 1;
+
+                if (cheatIndicator <= 10) {
+                    compMove = cheat.getMove(playerMove);
+                } else if (cheatIndicator <= 30) {
+                    compMove = leastUsed.getMove(playerMove);
+                } else if (cheatIndicator <= 50) {
+                    compMove = mostUsed.getMove(playerMove);
+                } else if (cheatIndicator <= 70) {
+                    compMove = lastUsed.getMove(playerMove);
+                } else {
+                    compMove = random.getMove(playerMove);
+                }
+
+                // Determine winner & update UI
+                String result;
+                if (playerMove.equals(compMove)) {
+                    tiesCnt++;
+                    result = "It's a tie!";
+                } else if (
+                        (playerMove.equals("R") && compMove.equals("S")) ||
+                                (playerMove.equals("P") && compMove.equals("R")) ||
+                                (playerMove.equals("S") && compMove.equals("P"))
+                ) {
+                    playerWinCnt++;
+                    result = "You win!";
+                } else {
+                    computerWinCnt++;
+                    result = "Computer wins!";
+                }
+
+                playerWinTxt.setText(String.valueOf(playerWinCnt));
+                computerWinTxt.setText(String.valueOf(computerWinCnt));
+                tiesTxt.setText(String.valueOf(tiesCnt));
+
+                resultTxt.append("You: " + playerMove + " | Computer: " + compMove + " → " + result + "\n");
             }
         };
 
         rockBtn.addActionListener(moveListener);
         paperBtn.addActionListener(moveListener);
         scissorsBtn.addActionListener(moveListener);
-        quitBtn.addActionListener((ActionEvent e)-> exit(0));
-
-        LeastUsed leastUsed = new LeastUsed();
-        MostUsed mostUsed = new MostUsed();
-        LastUsed lastUsed = new LastUsed();
-        rpsRandom random = new rpsRandom();
-        rpsCheat cheat = new rpsCheat();
-
-        int cheatIndicator = rand.nextInt(100) + 1;
-
-        if (cheatIndicator <= 10) {
-            // 10% chance
-            compMove = cheat.getMove(playerMove);
-        } else if (cheatIndicator <= 30) {
-            // 20% chance (11–30)
-            compMove = leastUsed.getMove(playerMove);
-        } else if (cheatIndicator <= 50) {
-            // 20% chance (31–50)
-            compMove = mostUsed.getMove(playerMove);
-        } else if (cheatIndicator <= 70) {
-            // 20% chance (51–70)
-            compMove = lastUsed.getMove(playerMove);
-        } else {
-            // 30% chance (71–100)
-            compMove = random.getMove(playerMove);
-        }
+        quitBtn.addActionListener((ActionEvent e) -> exit(0));
 
         buttonPnl.add(rockBtn);
         buttonPnl.add(paperBtn);
@@ -269,17 +285,16 @@ public class RockPaperScissorsFrame extends JFrame {
 
         @Override
         public String getMove(String playerMove) {
-            String lastMove = usedBtn.get(usedBtn.size() - 2);
-            switch (lastMove) {
-                case  "R":
-                    compMove = "P";
-                    break;
-                case  "P":
-                    compMove = "S";
-                    break;
-                case  "S":
-                    compMove = "R";
-                    break;
+            if (usedBtn.size() < 2) {
+                String[] moves = {"R", "P", "S"};
+                compMove = moves[rand.nextInt(3)];
+            } else {
+                String lastMove = usedBtn.get(usedBtn.size() - 2);
+                switch (lastMove) {
+                    case "R" -> compMove = "P";
+                    case "P" -> compMove = "S";
+                    case "S" -> compMove = "R";
+                }
             }
             return compMove;
         }

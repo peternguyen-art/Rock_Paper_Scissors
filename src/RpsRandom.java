@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class rpsRandom implements Strategy{
+public class RpsRandom implements Strategy{
     Random rand = new Random();
     String compMove;
 
