@@ -51,6 +51,8 @@ public class RockPaperScissorsFrame extends JFrame {
 
     ArrayList<String> usedBtn = new ArrayList<>();
 
+    String playerMove = "";
+
     public RockPaperScissorsFrame() {
         mainPnl = new JPanel();
         mainPnl.setLayout(new BorderLayout());
@@ -166,11 +168,19 @@ public class RockPaperScissorsFrame extends JFrame {
         scissorsBtn.setIcon(scissorsImg);
         quitBtn.setIcon(quitImg);
 
+        ActionListener moveListener = new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                String playerMove
+            }
+        }
+
         rockBtn.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 rockCnt++;
                 usedBtn.add("R");
+                playerMove = "R";
             }
         });
 
@@ -179,6 +189,7 @@ public class RockPaperScissorsFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 paperCnt++;
                 usedBtn.add("P");
+                playerMove = "P";
             }
         });
 
@@ -187,6 +198,7 @@ public class RockPaperScissorsFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 scissorsCnt++;
                 usedBtn.add("S");
+                playerMove = "S";
             }
         });
 
@@ -256,6 +268,4 @@ public class RockPaperScissorsFrame extends JFrame {
             return compMove;
         }
     }
-
-
 }
