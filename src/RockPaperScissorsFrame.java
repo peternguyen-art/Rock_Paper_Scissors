@@ -1,5 +1,9 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+
+import static java.lang.System.exit;
 
 public class RockPaperScissorsFrame extends JFrame {
     JPanel mainPnl;
@@ -46,7 +50,8 @@ public class RockPaperScissorsFrame extends JFrame {
         createCenterPnl();
         mainPnl.add(centerPnl,BorderLayout.CENTER);
 
-//        mainPnl.add(buttonPnl,BorderLayout.SOUTH);
+        createButtonPnl();
+        mainPnl.add(buttonPnl,BorderLayout.SOUTH);
 
         add(mainPnl);
         setSize(500,500);
@@ -76,8 +81,9 @@ public class RockPaperScissorsFrame extends JFrame {
 
     private void createStatPnl(){
         statPnl = new JPanel();
-        statPnl.setLayout(new GridLayout(3,1));
+        statPnl.setLayout(new GridLayout(4,1));
 
+        statPnl.setBorder(new EmptyBorder(30,30,50,50));
         playerWinLb = new JLabel("Player Wins: ");
         playerWinLb.setFont(new Font("Arial", Font.BOLD, 14));
         computerWinLb = new JLabel("Computer Wins: ");
@@ -86,8 +92,11 @@ public class RockPaperScissorsFrame extends JFrame {
         tiesLabel.setFont(new Font("Arial", Font.BOLD, 14));
 
         playerWinTxt = new JTextField(String.valueOf(playerWinCnt));
+        playerWinTxt.setHorizontalAlignment(JTextField.CENTER);
         computerWinTxt = new JTextField(String.valueOf(computerWinCnt));
+        computerWinTxt.setHorizontalAlignment(JTextField.CENTER);
         tiesTxt = new JTextField(String.valueOf(tiesCnt));
+        tiesTxt.setHorizontalAlignment(JTextField.CENTER);
 
         playerWinTxt.setEditable(false);
         computerWinTxt.setEditable(false);
@@ -110,5 +119,47 @@ public class RockPaperScissorsFrame extends JFrame {
         resultTxt.setEditable(false);
 
         resultPnl.add(resultScroll);
+    }
+
+    private void  createButtonPnl(){
+        buttonPnl = new JPanel();
+        buttonPnl.setLayout(new GridLayout(1,4));
+
+        rockBtn = new JButton("Rock");
+        paperBtn = new JButton("Paper");
+        scissorsBtn = new JButton("Scissors");
+        quitBtn = new JButton("Quit");
+
+        rockImg = new ImageIcon("src/assets/rock.png");
+        paperImg = new ImageIcon("src/assets/paper.png");
+        scissorsImg = new ImageIcon("src/assets/scissors.png");
+        quitImg = new ImageIcon("src/assets/quit.png");
+
+        Image rock = rockImg.getImage();
+        Image paper = paperImg.getImage();
+        Image scissors = scissorsImg.getImage();
+        Image quit = quitImg.getImage();
+
+        Image resizedRock = rock.getScaledInstance(25,25,Image.SCALE_SMOOTH);
+        Image resizedPaper = paper.getScaledInstance(25,25,Image.SCALE_SMOOTH);
+        Image resizedScissors = scissors.getScaledInstance(25,25,Image.SCALE_SMOOTH);
+        Image resizedQuit = quit.getScaledInstance(25,25,Image.SCALE_SMOOTH);
+
+        rockImg = new ImageIcon(resizedRock);
+        paperImg = new ImageIcon(resizedPaper);
+        scissorsImg = new ImageIcon(resizedScissors);
+        quitImg = new ImageIcon(resizedQuit);
+
+        rockBtn.setIcon(rockImg);
+        paperBtn.setIcon(paperImg);
+        scissorsBtn.setIcon(scissorsImg);
+        quitBtn.setIcon(quitImg);
+
+        quitBtn.addActionListener((ActionEvent e)-> exit(0));
+
+        buttonPnl.add(rockBtn);
+        buttonPnl.add(paperBtn);
+        buttonPnl.add(scissorsBtn);
+        buttonPnl.add(quitBtn);
     }
 }
