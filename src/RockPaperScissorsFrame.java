@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
 
 import static java.lang.System.exit;
 
@@ -39,6 +41,12 @@ public class RockPaperScissorsFrame extends JFrame {
     int playerWinCnt = 0;
     int computerWinCnt = 0;
     int tiesCnt = 0;
+
+    int rockCnt = 0;
+    int paperCnt = 0;
+    int scissorsCnt = 0;
+
+    Random rand = new Random();
 
     public RockPaperScissorsFrame() {
         mainPnl = new JPanel();
@@ -155,11 +163,77 @@ public class RockPaperScissorsFrame extends JFrame {
         scissorsBtn.setIcon(scissorsImg);
         quitBtn.setIcon(quitImg);
 
+        rockBtn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rockCnt++;
+            }
+        });
+
+        paperBtn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                paperCnt++;
+            }
+        });
+
+        scissorsBtn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scissorsCnt++;
+            }
+        });
+
         quitBtn.addActionListener((ActionEvent e)-> exit(0));
 
         buttonPnl.add(rockBtn);
         buttonPnl.add(paperBtn);
         buttonPnl.add(scissorsBtn);
         buttonPnl.add(quitBtn);
+    }
+
+    public class leastUsed implements Strategy{
+        String compMove;
+
+        @Override
+        public String getMove(String playerMove) {
+            if (rockCnt < paperCnt && rockCnt < scissorsCnt) {
+                compMove = "P";
+            } else if(paperCnt < rockCnt && paperCnt < scissorsCnt) {
+                compMove = "S";
+            } else if (scissorsCnt < rockCnt && scissorsCnt < paperCnt) {
+                compMove = "R";
+            } else {
+                String[] moves = {"R", "P", "S"};
+                compMove = moves[rand.nextInt(3)];
+            }
+            return compMove;
+        }
+    }
+
+    public class mostUsed implements Strategy{
+        String compMove;
+
+        @Override
+        public String getMove(String playerMove) {
+            if (rockCnt > paperCnt && rockCnt > scissorsCnt) {
+                compMove = "P";
+            } else if(paperCnt > rockCnt && paperCnt > scissorsCnt) {
+                compMove = "S";
+            } else if (scissorsCnt > rockCnt && scissorsCnt > paperCnt) {
+                compMove = "R";
+            } else {
+                String[] moves = {"R", "P", "S"};
+                compMove = moves[rand.nextInt(3)];
+            }
+            return compMove;
+        }
+    }
+
+    public class lastUsed implements Strategy{
+        String compMove;
+
+        @Override
+        public String getMove(String playerMove) {}
     }
 }
