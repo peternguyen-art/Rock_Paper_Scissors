@@ -5,10 +5,32 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
-
 import static java.lang.System.exit;
 
+/**
+ * The RockPaperScissorsFrame class implements a GUI-based Rock-Paper-Scissors game.
+ * It provides multiple computer strategies (Least Used, Most Used, Last Used, Random, Cheat)
+ * and displays live game statistics such as player wins, computer wins, and ties.
+ *
+ * The game determines the computer's move based on a random probability distribution:
+ * <ul>
+ *     <li>1–10% → Cheat</li>
+ *     <li>11–30% → Least Used</li>
+ *     <li>31–50% → Most Used</li>
+ *     <li>51–70% → Last Used</li>
+ *     <li>71–100% → Random</li>
+ * </ul>
+ *
+ * Each button press triggers an action event that records the player's move
+ * and determines the computer’s move accordingly.
+ *
+ * Author: Peter Nguyễn
+ * Version: 1.0
+ * Date: October 2025
+ */
+
 public class RockPaperScissorsFrame extends JFrame {
+    // Panels
     JPanel mainPnl;
     JPanel titlePnl;
     JPanel centerPnl;
@@ -16,29 +38,34 @@ public class RockPaperScissorsFrame extends JFrame {
     JPanel resultPnl;
     JPanel buttonPnl;
 
+    // Buttons
     JButton rockBtn;
     JButton paperBtn;
     JButton scissorsBtn;
     JButton quitBtn;
 
+    // ImageIcon
     ImageIcon rockImg;
     ImageIcon paperImg;
     ImageIcon scissorsImg;
     ImageIcon quitImg;
 
+    // Labels
     JLabel titleLbl;
     JLabel playerWinLb;
     JLabel computerWinLb;
     JLabel tiesLabel;
 
-    //text fields
+    // Text fields
     JTextField playerWinTxt;
     JTextField computerWinTxt;
     JTextField tiesTxt;
 
+    // Text Area
     JTextArea resultTxt;
     JScrollPane resultScroll;
 
+    // Other game stats
     int playerWinCnt = 0;
     int computerWinCnt = 0;
     int tiesCnt = 0;
@@ -54,6 +81,9 @@ public class RockPaperScissorsFrame extends JFrame {
     String playerMove = "";
     String compMove = "";
 
+    /**
+     * Constructs the main RockPaperScissorsFrame and initializes the GUI components.
+     */
     public RockPaperScissorsFrame() {
         mainPnl = new JPanel();
         mainPnl.setLayout(new BorderLayout());
@@ -73,6 +103,9 @@ public class RockPaperScissorsFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * Creates the title panel with the main game label.
+     */
     private void createTitlePnl(){
         titlePnl = new JPanel();
         titleLbl = new JLabel("Rock Paper Scissors Game!");
@@ -81,6 +114,9 @@ public class RockPaperScissorsFrame extends JFrame {
         titlePnl.add(titleLbl);
     }
 
+    /**
+     * Creates the center panel containing the stats and results sections.
+     */
     private void createCenterPnl(){
         centerPnl = new JPanel();
         centerPnl.setLayout(new BorderLayout());
@@ -93,6 +129,9 @@ public class RockPaperScissorsFrame extends JFrame {
 
     }
 
+    /**
+     * Creates the statistics panel displaying player wins, computer wins, and ties.
+     */
     private void createStatPnl(){
         statPnl = new JPanel();
         statPnl.setLayout(new GridLayout(4,1));
@@ -124,6 +163,9 @@ public class RockPaperScissorsFrame extends JFrame {
         statPnl.add(tiesTxt);
     }
 
+    /**
+     * Creates the result panel containing the game log.
+     */
     private void createResultPnl(){
         resultPnl = new JPanel();
         resultTxt = new JTextArea(10,25);
@@ -137,6 +179,10 @@ public class RockPaperScissorsFrame extends JFrame {
         resultPnl.add(resultScroll);
     }
 
+    /**
+     * Creates the panel for user input buttons (Rock, Paper, Scissors, Quit)
+     * and sets up listeners for user actions and computer strategy selection.
+     */
     private void  createButtonPnl(){
         buttonPnl = new JPanel();
         buttonPnl.setLayout(new GridLayout(1,4));
@@ -245,6 +291,9 @@ public class RockPaperScissorsFrame extends JFrame {
         buttonPnl.add(quitBtn);
     }
 
+    /**
+     * Strategy that selects the move least used by the player so far.
+     */
     public class LeastUsed implements Strategy{
 
         @Override
@@ -263,6 +312,9 @@ public class RockPaperScissorsFrame extends JFrame {
         }
     }
 
+    /**
+     * Strategy that selects the move most used by the player so far.
+     */
     public class MostUsed implements Strategy{
 
         @Override
@@ -281,6 +333,9 @@ public class RockPaperScissorsFrame extends JFrame {
         }
     }
 
+    /**
+     * Strategy that counters the player's previous move.
+     */
     public class LastUsed implements Strategy{
 
         @Override
