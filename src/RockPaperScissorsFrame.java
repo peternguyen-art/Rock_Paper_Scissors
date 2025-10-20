@@ -3,6 +3,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static java.lang.System.exit;
@@ -47,6 +48,8 @@ public class RockPaperScissorsFrame extends JFrame {
     int scissorsCnt = 0;
 
     Random rand = new Random();
+
+    ArrayList<String> usedBtn = new ArrayList<>();
 
     public RockPaperScissorsFrame() {
         mainPnl = new JPanel();
@@ -167,6 +170,7 @@ public class RockPaperScissorsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rockCnt++;
+                usedBtn.add("R");
             }
         });
 
@@ -174,6 +178,7 @@ public class RockPaperScissorsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 paperCnt++;
+                usedBtn.add("P");
             }
         });
 
@@ -181,6 +186,7 @@ public class RockPaperScissorsFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 scissorsCnt++;
+                usedBtn.add("S");
             }
         });
 
@@ -234,6 +240,22 @@ public class RockPaperScissorsFrame extends JFrame {
         String compMove;
 
         @Override
-        public String getMove(String playerMove) {}
+        public String getMove(String playerMove) {
+            String lastMove = usedBtn.get(usedBtn.size() - 2);
+            switch (lastMove) {
+                case  "R":
+                    compMove = "P";
+                    break;
+                case  "P":
+                    compMove = "S";
+                    break;
+                case  "S":
+                    compMove = "R";
+                    break;
+            }
+            return compMove;
+        }
     }
+
+
 }
