@@ -52,6 +52,7 @@ public class RockPaperScissorsFrame extends JFrame {
     ArrayList<String> usedBtn = new ArrayList<>();
 
     String playerMove = "";
+    String compMove = "";
 
     public RockPaperScissorsFrame() {
         mainPnl = new JPanel();
@@ -168,41 +169,59 @@ public class RockPaperScissorsFrame extends JFrame {
         scissorsBtn.setIcon(scissorsImg);
         quitBtn.setIcon(quitImg);
 
-        ActionListener moveListener = new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                String playerMove
-            }
-        }
+        rockBtn.setActionCommand("R");
+        paperBtn.setActionCommand("P");
+        scissorsBtn.setActionCommand("S");
 
-        rockBtn.addActionListener(new ActionListener(){
+        ActionListener moveListener = new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                rockCnt++;
-                usedBtn.add("R");
-                playerMove = "R";
-            }
-        });
+            public void actionPerformed(ActionEvent ae) {
+                playerMove = ae.getActionCommand();
+                usedBtn.add(playerMove);
 
-        paperBtn.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                paperCnt++;
-                usedBtn.add("P");
-                playerMove = "P";
+                switch (playerMove) {
+                    case "R":
+                        rockCnt++;
+                        break;
+                    case "P":
+                        paperCnt++;
+                        break;
+                    case "S":
+                        scissorsCnt++;
+                        break;
+                }
             }
-        });
+        };
 
-        scissorsBtn.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                scissorsCnt++;
-                usedBtn.add("S");
-                playerMove = "S";
-            }
-        });
-
+        rockBtn.addActionListener(moveListener);
+        paperBtn.addActionListener(moveListener);
+        scissorsBtn.addActionListener(moveListener);
         quitBtn.addActionListener((ActionEvent e)-> exit(0));
+
+        LeastUsed leastUsed = new LeastUsed();
+        MostUsed mostUsed = new MostUsed();
+        LastUsed lastUsed = new LastUsed();
+        rpsRandom random = new rpsRandom();
+        rpsCheat cheat = new rpsCheat();
+
+        int cheatIndicator = rand.nextInt(100) + 1;
+
+        if (cheatIndicator <= 10) {
+            // 10% chance
+            compMove = cheat.getMove(playerMove);
+        } else if (cheatIndicator <= 30) {
+            // 20% chance (11–30)
+            compMove = leastUsed.getMove(playerMove);
+        } else if (cheatIndicator <= 50) {
+            // 20% chance (31–50)
+            compMove = mostUsed.getMove(playerMove);
+        } else if (cheatIndicator <= 70) {
+            // 20% chance (51–70)
+            compMove = lastUsed.getMove(playerMove);
+        } else {
+            // 30% chance (71–100)
+            compMove = random.getMove(playerMove);
+        }
 
         buttonPnl.add(rockBtn);
         buttonPnl.add(paperBtn);
@@ -210,8 +229,7 @@ public class RockPaperScissorsFrame extends JFrame {
         buttonPnl.add(quitBtn);
     }
 
-    public class leastUsed implements Strategy{
-        String compMove;
+    public class LeastUsed implements Strategy{
 
         @Override
         public String getMove(String playerMove) {
@@ -229,8 +247,7 @@ public class RockPaperScissorsFrame extends JFrame {
         }
     }
 
-    public class mostUsed implements Strategy{
-        String compMove;
+    public class MostUsed implements Strategy{
 
         @Override
         public String getMove(String playerMove) {
@@ -248,8 +265,7 @@ public class RockPaperScissorsFrame extends JFrame {
         }
     }
 
-    public class lastUsed implements Strategy{
-        String compMove;
+    public class LastUsed implements Strategy{
 
         @Override
         public String getMove(String playerMove) {
